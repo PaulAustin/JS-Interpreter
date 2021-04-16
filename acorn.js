@@ -270,7 +270,7 @@
   var _if = {keyword: "if"}, _return = {keyword: "return", beforeExpr: true}, _switch = {keyword: "switch"};
   var _throw = {keyword: "throw", beforeExpr: true}, _try = {keyword: "try"};
   var _var = {keyword: "var"};
-  var _let = {keyword: "let"};
+  var _let = {keyword: "let"}, _const = {keyword: "const"};
   var _while = {keyword: "while", isLoop: true}, _with = {keyword: "with"}, _new = {keyword: "new", beforeExpr: true};
   var _this = {keyword: "this"};
 
@@ -287,7 +287,7 @@
 
   // Map keyword names to token types.
 
-  var keywordTypes = {"break": _break, "case": _case, "catch": _catch,
+  var keywordTypes = {"break": _break, "case": _case, "catch": _catch, "const": _const,
                       "continue": _continue, "debugger": _debugger, "default": _default,
                       "do": _do, "else": _else, "finally": _finally, "for": _for,
                       "function": _function, "if": _if, "return": _return, "switch": _switch,
@@ -410,7 +410,7 @@
 
   // And the keywords.
 
-  var isKeyword = makePredicate("break case catch continue debugger default do else finally for function if return switch throw try var let while with null true false instanceof typeof void delete new in this");
+  var isKeyword = makePredicate("break case catch continue debugger default do else finally for function if return switch throw try var let const while with null true false instanceof typeof void delete new in this");
 
   // ## Character categories
 
@@ -1195,7 +1195,7 @@
       labels.push(loopLabel);
       expect(_parenL);
       if (tokType === _semi) return parseFor(node, null);
-      if (tokType === _var) {
+      if (tokType === _var || tokType === _let) {
         var init = startNode();
         next();
         parseVar(init, true);
@@ -1295,7 +1295,7 @@
         raise(node.start, "Missing catch or finally clause");
       return finishNode(node, "TryStatement");
 
-    case _var: case _let:
+    case _var: case _let: case _const:
       next();
       parseVar(node);
       semicolon();
