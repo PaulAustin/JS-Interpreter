@@ -268,7 +268,9 @@
   var _do = {keyword: "do", isLoop: true}, _else = {keyword: "else", beforeExpr: true};
   var _finally = {keyword: "finally"}, _for = {keyword: "for", isLoop: true}, _function = {keyword: "function"};
   var _if = {keyword: "if"}, _return = {keyword: "return", beforeExpr: true}, _switch = {keyword: "switch"};
-  var _throw = {keyword: "throw", beforeExpr: true}, _try = {keyword: "try"}, _var = {keyword: "var"};
+  var _throw = {keyword: "throw", beforeExpr: true}, _try = {keyword: "try"};
+  var _var = {keyword: "var"};
+  var _let = {keyword: "let"};
   var _while = {keyword: "while", isLoop: true}, _with = {keyword: "with"}, _new = {keyword: "new", beforeExpr: true};
   var _this = {keyword: "this"};
 
@@ -289,7 +291,7 @@
                       "continue": _continue, "debugger": _debugger, "default": _default,
                       "do": _do, "else": _else, "finally": _finally, "for": _for,
                       "function": _function, "if": _if, "return": _return, "switch": _switch,
-                      "throw": _throw, "try": _try, "var": _var, "while": _while, "with": _with,
+                      "throw": _throw, "try": _try, "var": _var, "let": _let, "while": _while, "with": _with,
                       "null": _null, "true": _true, "false": _false, "new": _new, "in": _in,
                       "instanceof": {keyword: "instanceof", binop: 7, beforeExpr: true}, "this": _this,
                       "typeof": {keyword: "typeof", prefix: true, beforeExpr: true},
@@ -408,7 +410,7 @@
 
   // And the keywords.
 
-  var isKeyword = makePredicate("break case catch continue debugger default do else finally for function if return switch throw try var while with null true false instanceof typeof void delete new in this");
+  var isKeyword = makePredicate("break case catch continue debugger default do else finally for function if return switch throw try var let while with null true false instanceof typeof void delete new in this");
 
   // ## Character categories
 
@@ -435,10 +437,12 @@
   // Test whether a given character code starts an identifier.
 
   var isIdentifierStart = exports.isIdentifierStart = function(code) {
-    if (code < 65) return code === 36;
-    if (code < 91) return true;
-    if (code < 97) return code === 95;
-    if (code < 123)return true;
+    // Quick trick to see if it looks like a word
+    if (code < 65) return code === 36;  // '$' first before 'a'
+    if (code < 91) return true;         // all A-Z
+    if (code < 97) return code === 95;  // _
+    if (code < 123)return true;         // all a-z
+    // If it above ASCII range then look for specials
     return code >= 0xaa && nonASCIIidentifierStart.test(String.fromCharCode(code));
   };
 
@@ -1134,7 +1138,7 @@
     if (tokType === _slash || tokType === _assign && tokVal == "/=")
       readToken(true);
 
-    var starttype = tokType, node = startNode();
+      var starttype = tokType, node = startNode();
 
     // Most types of statements are recognized by the keyword they
     // start with. Many are trivial to parse, some require a bit of
@@ -1291,7 +1295,7 @@
         raise(node.start, "Missing catch or finally clause");
       return finishNode(node, "TryStatement");
 
-    case _var:
+    case _var: case _let:
       next();
       parseVar(node);
       semicolon();
