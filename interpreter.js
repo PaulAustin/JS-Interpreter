@@ -20,9 +20,7 @@
  */
 var Interpreter = function(code, opt_initFunc) {
   if (typeof code === 'string') {
-    console.log('start parse')
     code = acorn.parse(code, Interpreter.PARSE_OPTIONS);
-    console.log('end parse')
   }
   // Get a handle on Acorn's node_t object.
   this.nodeConstructor = code.constructor;
