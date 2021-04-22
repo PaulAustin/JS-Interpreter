@@ -266,13 +266,19 @@
   var _break = {keyword: "break"}, _case = {keyword: "case", beforeExpr: true}, _catch = {keyword: "catch"};
   var _continue = {keyword: "continue"}, _debugger = {keyword: "debugger"}, _default = {keyword: "default"};
   var _do = {keyword: "do", isLoop: true}, _else = {keyword: "else", beforeExpr: true};
-  var _finally = {keyword: "finally"}, _for = {keyword: "for", isLoop: true}, _function = {keyword: "function"};
-  var _if = {keyword: "if"}, _return = {keyword: "return", beforeExpr: true}, _switch = {keyword: "switch"};
+  var _finally = {keyword: "finally"};
+  var _for = {keyword: "for", isLoop: true};
+  var _function = {keyword: "function"};
+  var _if = {keyword: "if"}; 
+  var _return = {keyword: "return", beforeExpr: true};
+  var _switch = {keyword: "switch"};
   var _throw = {keyword: "throw", beforeExpr: true}, _try = {keyword: "try"};
   var _var = {keyword: "var"};
   var _let = {keyword: "let"}, _const = {keyword: "const"};
   var _while = {keyword: "while", isLoop: true}, _with = {keyword: "with"}, _new = {keyword: "new", beforeExpr: true};
   var _this = {keyword: "this"};
+  var _import = {keyword: "import"};
+  var _class = {keyword: "class"};
 
   // The keywords that denote values.
 
