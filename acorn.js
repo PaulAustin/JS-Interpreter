@@ -277,7 +277,7 @@
   var _let = {keyword: "let"}, _const = {keyword: "const"};
   var _while = {keyword: "while", isLoop: true}, _with = {keyword: "with"}, _new = {keyword: "new", beforeExpr: true};
   var _this = {keyword: "this"};
-  var _import = {keyword: "import"};
+  var _import = {keyword: "import"}, _from = {keyword: "from"}, _as = {keyword: "as"};
   var _class = {keyword: "class"};
 
   // The keywords that denote values.
@@ -302,7 +302,9 @@
                       "instanceof": {keyword: "instanceof", binop: 7, beforeExpr: true}, "this": _this,
                       "typeof": {keyword: "typeof", prefix: true, beforeExpr: true},
                       "void": {keyword: "void", prefix: true, beforeExpr: true},
-                      "delete": {keyword: "delete", prefix: true, beforeExpr: true}};
+                      "delete": {keyword: "delete", prefix: true, beforeExpr: true},
+                      "import":_import, "as":_as, "from":_from, 
+                    };
 
   // Punctuation token types. Again, the `type` property is purely for debugging.
 
@@ -415,8 +417,9 @@
   var isStrictBadIdWord = makePredicate("eval arguments");
 
   // And the keywords.
+  // PFA-adding some ES6 (import as from)
 
-  var isKeyword = makePredicate("break case catch continue debugger default do else finally for function if return switch throw try var let const while with null true false instanceof typeof void delete new in this");
+  var isKeyword = makePredicate("break case catch continue debugger default do else finally for function if return switch throw try var let const while with null true false instanceof typeof void delete new in this import as from");
 
   // ## Character categories
 
@@ -1329,6 +1332,10 @@
       next();
       return finishNode(node, "EmptyStatement");
 
+    case _import:
+      next();
+      return parseImport(node);
+
       // If the statement does not start with a statement keyword or a
       // brace, it's an ExpressionStatement or LabeledStatement. We
       // simply start parsing an expression, and afterwards, if the
@@ -1699,6 +1706,11 @@
 
   // Parse a function declaration or literal (depending on the
   // `isStatement` parameter).
+
+  function parseImport(node) {
+    console.log("simple import statement")
+    var symbols = parseExpression();
+  }
 
   function parseFunction(node, isStatement) {
     if (tokType === _name) node.id = parseIdent();

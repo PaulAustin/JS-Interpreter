@@ -20,6 +20,8 @@
  */
 var Interpreter = function(code, opt_initFunc) {
   if (typeof code === 'string') {
+    // PFA PARSE_OPTIONS is ES6, though the ac doe not voer all of those features
+    // at this time.
     code = acorn.parse(code, Interpreter.PARSE_OPTIONS);
   }
   // Get a handle on Acorn's node_t object.
@@ -85,7 +87,7 @@ var Interpreter = function(code, opt_initFunc) {
  * @const {!Object} Configuration used for all Acorn parsing.
  */
 Interpreter.PARSE_OPTIONS = {
-  ecmaVersion: 5
+  ecmaVersion: 6
 };
 
 /**
